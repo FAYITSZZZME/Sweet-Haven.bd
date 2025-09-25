@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sweet Haven – Jualan Produk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #f8c8dc;
+      --white: #ffffff;
+      --dark-bg: #1e1e1e;
+      --dark-text: #f2f2f2;
+      --card-light: rgba(255, 255, 255, 0.8);
+      --card-dark: rgba(40, 40, 40, 0.9);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: "Poppins", sans-serif;
+      background: var(--white);
+      color: #333;
+      font-size: 16px;
+      transition: 0.4s;
+      scroll-behavior: smooth;
+    }
+    body.dark {
+      background: var(--dark-bg);
+      color: var(--dark-text);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.8s ease forwards;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      background: #ffe6f0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand img {
+      height: 50px;
+    }
+    .brand h1 {
+      font-size: 1.2rem;
+      color: deeppink;
+      font-weight: 700;
+    }
+    .nav-links {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: 0.3s;
+      padding: 8px 12px;
+      border-radius: 20px;
+    }
+    .nav-links a:hover {
+      background: deeppink;
+      color: white;
+      transform: translateY(-2px);
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background: #333;
+      border-radius: 3px;
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 55px;
+        right: 10px;
+        background: #ffe6f0;
+        border-radius: 10px;
+        padding: 1rem;
+        flex-direction: column;
+        width: 180px;
+        left: auto;
+        transform: none;
+      }
+      .nav-links.active {
+        display: flex;
+      }
+      .hamburger {
+        display: flex;
+      }
+      /* .testi-track { 
+        transform: none !important; 
+        justify-content: center;
+      }
+      .testi-card { 
+        min-width: 90%; 
+        margin: 0 auto;
+      } */
+    }
+    
+    /* Slider */
+    .slider-wrapper {
+      padding: 0 6%;
+      margin: 1.5rem 0;
+    }
+    .slider {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    .slides {
+      display: flex;
+      height: 100%;
+      transition: transform 0.6s ease;
+    }
+    .slides img {
+      min-width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 192, 203, 0.7);
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 18px;
+    }
+    .prev {
+      left: 10px;
+    }
+    .next {
+      right: 10px;
+    }
+    .indicators {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .dot.active {
+      background: deeppink;
+    }
+    /* Container */
+    .container {
+      padding: 1.5rem 1rem;
+      text-align: center;
+      max-width: 900px;
+      margin: 1.5rem auto;
+      background: var(--card-light);
+      border-radius: 25px;
+      box-shadow: 0 8px 20px rgba(255, 182, 193, 0.35);
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    body.dark .container {
+      background: var(--card-dark);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    }
+    .container.show {
+      animation: fadeIn 0.8s ease forwards;
+    }
+    .container h2 {
+      margin-bottom: 1rem;
+      color: deeppink;
+      font-size: 1.4rem;
+    }
+    .box-cute {
+      background: #fff0f5;
+      border: 2px dashed deeppink;
+      border-radius: 20px;
+      padding: 1rem;
+      margin: 1rem 0;
+      display: inline-block;
+      text-align: left;
+      transition: 0.3s;
+    }
+    body.dark .box-cute {
+      background: #2c2c2c;
+      border-color: hotpink;
+    }
+    /* Katalog */
+    .catalog {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .product {
+      border: 2px solid #ffd6e8;
+      border-radius: 20px;
+      padding: 1rem;
+      width: 160px;
+      background: #fff0f5;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .product.show {
+      animation: fadeIn 0.8s ease forwards;
+    }
+    .product:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 15px rgba(255, 182, 193, 0.5);
+    }
+    body.dark .product {
+      background: #2c2c2c;
+      border-color: #555;
+    }
+    .product img {
+      width: 100%;
+      border-radius: 15px;
+      margin-bottom: 10px;
+    }
+    .product h3 {
+      font-size: 0.95rem;
+    }
+    .product p {
+      font-size: 0.8rem;
+      margin: 4px 0;
+    }
+    .product button {
+      margin: 4px 2px;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 8px;
+      background: deeppink;
+      color: white;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: 0.3s;
+    }
+    .product button:hover {
+      background: hotpink;
+      transform: scale(1.05);
+    }
+    /* Testi carousel */
+    .testi-wrapper {
+      margin: 2rem 0;
+      overflow: hidden;
+    }
+    .testi-track {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .testi-card {
+      min-width: 100%;
+      padding: 1rem 2rem;
+      box-sizing: border-box;
+    }
+    .stars {
+      color: deeppink;
+      font-size: 1rem;
+    }
+    /* Share & WA bubble */
+    .share-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .share-btn {
+      background: #25d366;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+    .wa-bubble {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      z-index: 99;
+    }
+    .wa-bubble svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+    }
+    /* Dark & Top btn */
+    .ctrl-btn {
+      position: fixed;
+      right: 20px;
+      width: 46px;
+      height: 46px;
+      border: none;
+      border-radius: 12px;
+      background: deeppink;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dark-btn {
+      bottom: 20px;
+    }
+    .top-btn {
+      bottom: 160px;
+      display: none;
+    }
+    .ctrl-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: white;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: var(--pink);
+      margin-top: 2rem;
+      font-size: 0.8rem;
+    }
+    
+    /* Desktop testimonial centering */
+    /* @media (min-width: 769px) {
+      .testi-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .testi-track {
+        transform: none !important;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+      .testi-card {
+        min-width: 33.33%;
+        max-width: 350px;
+        margin: 0 10px;
+        text-align: center;
+      }
+    } */
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="brand">
+      <img src="logo - Diedit.png" alt="Logo">
+      <h1>Sweet Haven</h1>
+    </div>
+    <div class="nav-links">
+      <a href="#sambutan" onclick="closeMenu()">Sambutan</a>
+      <a href="#profil" onclick="closeMenu()">Profil</a>
+      <a href="#kelompok" onclick="closeMenu()">Kelompok</a>
+      <a href="#katalog" onclick="closeMenu()">Katalog</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+  </nav>
+
+  <!-- Slider -->
+  <div class="slider-wrapper fade-in">
+    <div class="slider">
+      <div class="slides">
+        <img src="LAPANGAN SKENSA.jpg" loading="lazy">
+        <img src="SAMPING SEKOLAH.jpg" loading="lazy">
+        <img src="DEPAN SEKOLAH.jpg" loading="lazy">
+      </div>
+      <button class="prev" onclick="prevSlide()">❮</button>
+      <button class="next" onclick="nextSlide()">❯</button>
+    </div>
+    <div class="indicators">
+      <span class="dot active" onclick="goToSlide(0)"></span>
+      <span class="dot" onclick="goToSlide(1)"></span>
+      <span class="dot" onclick="goToSlide(2)"></span>
+    </div>
+  </div>
+
+  <!-- Sambutan -->
+  <div class="container" id="sambutan">
+    <h2>Sambutan Kepala Sekolah</h2>
+    <img src="pak sigit.jpg" alt="" style="border-radius: 15px; margin-bottom: 1rem; width: 120px;">
+    <div class="box-cute">
+      <strong>Assalamualaikum warahmatullahi wabarakatuh.</strong><br><br>
+
+      Puji syukur kita panjatkan ke hadirat Allah SWT atas segala rahmat, taufik, dan karunia-Nya, sehingga SMK Negeri 1 Pasuruan dapat terus berkembang, berinovasi, dan mencetak berbagai prestasi yang membanggakan.<br><br>
+
+      Sebagai lembaga pendidikan kejuruan, SMK Negeri 1 Pasuruan berkomitmen untuk memberikan layanan pendidikan yang berkualitas, membentuk lulusan yang kompeten, mandiri, berdaya saing, serta siap menghadapi tantangan dunia kerja maupun melanjutkan pendidikan ke jenjang yang lebih tinggi. Kami senantiasa berupaya menanamkan nilai disiplin, tanggung jawab, serta keterampilan yang relevan dengan perkembangan dunia industri dan teknologi.<br><br>
+
+      Kami juga berharap melalui website resmi ini, seluruh informasi mengenai program sekolah, kegiatan pembelajaran, prestasi siswa, maupun layanan akademik dan non-akademik dapat diakses dengan mudah oleh seluruh warga sekolah, orang tua, alumni, serta masyarakat umum. Dengan demikian, website ini tidak hanya menjadi sarana komunikasi, tetapi juga sebagai media transparansi dan jembatan interaksi antara sekolah dengan masyarakat luas.<br><br>
+
+      Akhir kata, mari bersama-sama mendukung setiap langkah SMK Negeri 1 Pasuruan dalam mewujudkan visi dan misi demi terciptanya generasi yang unggul, berkarakter, dan siap menghadapi masa depan.<br><br>
+
+      <strong>Wassalamualaikum warahmatullahi wabarakatuh.</strong><br><br>
+
+      <strong>Drs. Akh Sigit Suyani, S.ST, M.T</strong><br>
+      NIP. 19651216 199403 1 002
+    </div>
+  </div>
+
+  <!-- Profil -->
+  <div class="container" id="profil">
+    <h2>Profil Sekolah</h2>
+    <div class="box-cute">
+      <strong>SMK Negeri 1 Pasuruan</strong> merupakan salah satu sekolah menengah kejuruan tertua dan terkemuka di Kota Pasuruan yang sejak berdirinya telah berperan penting dalam mencetak sumber daya manusia yang terampil, berkarakter, dan siap bersaing di dunia kerja. Dengan pengalaman panjang, sekolah ini senantiasa menjadi rujukan masyarakat dalam memilih pendidikan vokasi yang berkualitas.<br><br>
+
+      Sekolah ini memiliki berbagai program keahlian yang dirancang sesuai dengan kebutuhan dunia usaha dan dunia industri (DUDI). Setiap jurusan dibekali dengan kurikulum berbasis kompetensi, praktik kerja lapangan, serta kolaborasi dengan mitra industri sehingga siswa tidak hanya menguasai teori, tetapi juga terampil secara nyata di bidangnya.<br><br>
+
+      Selain itu, SMK Negeri 1 Pasuruan juga dikenal memiliki lingkungan belajar yang kondusif, tenaga pendidik yang berdedikasi, serta fasilitas penunjang modern yang terus ditingkatkan. Perpaduan antara pembelajaran akademik, vokasi, dan kegiatan ekstrakurikuler menjadikan sekolah ini mampu menumbuhkan generasi yang cerdas, kreatif, disiplin, dan memiliki daya juang tinggi.<br><br>
+
+      Dengan semangat inovasi dan kerja sama yang kuat, SMK Negeri 1 Pasuruan terus berkomitmen untuk menjadi sekolah unggulan yang tidak hanya mencetak lulusan siap kerja, tetapi juga melahirkan wirausahawan muda, pemimpin masa depan, serta insan yang berkontribusi positif bagi masyarakat, bangsa, dan negara.
+    </div>
+  </div>
+
+  <!-- Kelompok -->
+  <div class="container" id="kelompok">
+    <h2>Tentang Kelompok</h2>
+    <div class="box-cute">
+      <strong>Kelompok Jurusan Bisnis Digital</strong> yang membuat website ini terdiri dari siswa-siswi SMK Negeri 1 Pasuruan yang bersemangat dalam mengembangkan keterampilan digital. Kami adalah tim muda yang berfokus pada pembelajaran bisnis modern, pemasaran digital, dan pengembangan website.<br><br>
+
+      Melalui project website Sweet Haven ini, kami mengaplikasikan ilmu yang kami pelajari di kelas Bisnis Digital, mulai dari perancangan user interface, pengalaman pengguna, hingga strategi pemasaran online. Kami percaya bahwa dengan kombinasi kreativitas, teknologi, dan semangat kewirausahaan, kami bisa menciptakan solusi digital yang bermanfaat bagi masyarakat.<br><br>
+
+      <strong>Visi kami:</strong> Menjadi generation Z yang tidak hanya konsumen digital, tetapi juga kreator digital yang mampu bersaing di era industri 4.0.<br><br>
+
+      <strong>Motto:</strong> "Dari siswa, untuk masyarakat, menuju Indonesia digital!"
+    </div>
+  </div>
+
+  <!-- Testimonial -->
+  <div class="container testi-wrapper">
+    <h2>Testimoni Pembeli</h2>
+    <div class="testi-track" id="testiTrack">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p><b>@rani_12</b><br>Es lumutnya seger bangeett! Harga murah rasa juaraa 💖</p>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p><b>@agung_rmdn</b><br>Roll cake-nya lembut, delivery cepat. Rekomen!</p>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p><b>@salsa.d</b><br>Packaging cute, jadi pengen beli lagi ❤️</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Katalog -->
+  <div class="container" id="katalog">
+    <h2>Katalog Produk</h2>
+    <div class="catalog">
+      <div class="product">
+        <img src="cd.jpg" loading="lazy" alt="Es Lumut Jelly">
+        <h3>Es Lumut Jelly</h3>
+        <p>Dibuat dengan jelly berkualitas serta susu murni</p>
+        <p><b>Rp 7000</b></p>
+        <button onclick="window.open('https://wa.me/628979443392?text=' + encodeURIComponent('Halo, mau pesan Es Lumut Jelly'))">Order via WhatsApp</button>
+        <button onclick="window.open('https://www.instagram.com/sweet__haven6?igsh=MWl4cGxrMHRwZTg4Yg==')">Order via Instagram</button>
+  
+
+        <div class="share-row">
+          <button class="share-btn" onclick="shareWa('Es Lumut Jelly')">Share WA</button>
+          <button class="share-btn" onclick="shareTg('Es Lumut Jelly')">Share TG</button>
+        </div>
+      </div>
+      <div class="product">
+        <img src="new.jpg" loading="lazy" alt="Towel Roll Cake">
+        <h3>Towel Roll Cake</h3>
+        <p>Roll cake lembut bertabung susu krim manis, tersedia rasa vanilla & cokelat. Dibuat fresh setiap pagi, pas dinikmati dingin!</p>
+        <p><b>Rp 4.000</b></p>
+        <button onclick="window.open('https://wa.me/628979443392?text=' + encodeURIComponent('Halo, mau pesan Towel Roll Cake nya ya!'))">Order via WhatsApp</button>
+        <button onclick="window.open('https://www.instagram.com/sweet__haven6?igsh=MWl4cGxrMHRwZTg4Yg==')">Order via Instagram</button>  
+
+        <div class="share-row">
+          <button class="share-btn" onclick="shareWa('Towel Roll Cake')">Share WA</button>
+          <button class="share-btn" onclick="shareTg('Towel Roll Cake')">Share TG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 hantaejunKai
+  </footer>
+
+  <!-- Floating WA -->
+  <div class="wa-bubble" onclick="window.open('https://wa.me/628979443392')">
+    <!-- <button onclick="window.open('https://wa.me/628979443392')">
+  Chat WhatsApp
+</button> -->
+    <svg viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+    </svg>
+  </div>
+  <!-- Dark & Top btn -->
+  <button class="ctrl-btn dark-btn" onclick="toggleMode()">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+    </svg>
+  </button>
+  <button class="ctrl-btn top-btn" onclick="scrollTopBtn()">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 24l0-20 10 10-20 0z"/>
+    </svg>
+  </button>
+  <script>
+    // Slider
+    let index = 0;
+    const slides = document.querySelectorAll('.slides img');
+    const dots = document.querySelectorAll('.dot');
+    function showSlide(n) {
+      index = (n + slides.length) % slides.length;
+      document.querySelector('.slides').style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach(d => d.classList.remove('active'));
+      dots[index].classList.add('active');
+    }
+    function nextSlide() { showSlide(index + 1); }
+    function prevSlide() { showSlide(index - 1); }
+    function goToSlide(n) { showSlide(n); }
+    setInterval(nextSlide, 4000);
+
+    // Dark mode
+    function toggleMode() {
+      document.body.classList.toggle('dark');
+    }
+
+    // Menu
+    function toggleMenu() {
+      document.querySelector('.nav-links').classList.toggle('active');
+    }
+    function closeMenu() {
+      document.querySelector('.nav-links').classList.remove('active');
+    }
+
+    // Scroll top btn
+    window.onscroll = function() {
+      const topBtn = document.querySelector('.top-btn');
+      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        topBtn.style.display = "block";
+      } else {
+        topBtn.style.display = "none";
+      }
+
+      // Animasi saat scroll
+      document.querySelectorAll('.container, .product').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 100) {
+          el.classList.add('show');
+        }
+      });
+    };
+    function scrollTopBtn() {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    // Testimonial Carousel
+    let testiIndex = 0;
+    const testiTrack = document.querySelector('.testi-track');
+    const testiCards = document.querySelectorAll('.testi-card');
+    function showTesti(n) {
+      testiIndex = (n + testiCards.length) % testiCards.length;
+      testiTrack.style.transform = `translateX(-${testiIndex * 100}%)`;
+    }
+    setInterval(() => showTesti(testiIndex + 1), 3000);
+
+    // Share
+    function shareWa(product) {
+      const text = `Hai, cek produk ini di Sweet Haven ya!: ${product}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+    }
+    function shareTg(product) {
+      const text = `Hai, cek produk ini di Sweet Haven: ${product}`;
+      window.open(`https://t.me/share/url?url=${encodeURIComponent(text)}`);
+    }
+  </script>
+</body>
+</html>
